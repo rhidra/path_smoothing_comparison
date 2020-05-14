@@ -6,8 +6,7 @@ import numpy as np
 from functools import reduce
 import matplotlib.pyplot as plt
 import numpy as np
-from common import Simulation
-import common, math, time
+import utils, math, time
 
 # Utility class to handle nodes more easily
 class Node:
@@ -36,7 +35,7 @@ def children(pos,grid):
 
 
 # Return the path computed by the A* optimized algorithm from the start and goal points
-def astar(start, goal, grid, display=False):
+def astar(start, goal, grid):
     openset = set()
     closedset = set()
 
@@ -70,21 +69,17 @@ def astar(start, goal, grid, display=False):
 
             if node in openset:
                 # Check if we beat the G score
-                new_g = current.G + common.dist(current, node)
+                new_g = current.G + utils.dist(current, node)
                 if node.G > new_g:
                     # If so, update the node to have a new parent
                     node.G = new_g
                     node.parent = current
             else:
                 # If it isn't in the open set, calculate the G and H score for the node
-                node.G = current.G + common.dist(current, node)
-                node.H = common.dist(node, goal)
+                node.G = current.G + utils.dist(current, node)
+                node.H = utils.dist(node, goal)
                 node.parent = current
                 openset.add(node)
-
-        if display:
-            Simulation.draw_astar(start, goal, grid, openset, under_sampling_factor, point=current.pos)
-            # time.sleep(1/60)
 
     raise ValueError('No Path Found')
 
@@ -93,7 +88,7 @@ def astar(start, goal, grid, display=False):
 under_sampling_factor = 4
 
 def preprocess_astar(start, goal, obstacles, width, height):
-    grid = [[Node((x,y), Node.OBSTACLE if common.is_in_obstacle((x,y), obstacles) else Node.FREE)
+    grid = [[Node((x,y), Node.OBSTACLE if utils.is_in_obstacle((x,y), obstacles) else Node.FREE)
             for y in range(0, height, under_sampling_factor)]
             for x in range(0, width, under_sampling_factor)]
     start = grid[math.floor(start[0]/under_sampling_factor)][math.floor(start[1]/under_sampling_factor)]

@@ -1,20 +1,20 @@
 import numpy as np
 from functools import reduce
-import math, pygame
+import math
 import matplotlib.pyplot as plt
 import sys, time
 import numpy as np
-from common import Constants, Node, Simulation
-import common as common
+from utils import Node
+import utils
 import world
 
 
 # Radius of closeness for rerouting a node
-RADIUS = 100
-
+REROUTING_RADIUS = 100
+END_RADIUS = 50
 MAX_ITERATIONS = 10000
 
-def rrt_star(start, goal, obstacles, display=False):
+def rrt_star(start, goal, obstacles):
     nodes = []
     nodes.append(Node(start, None))
 
@@ -23,11 +23,11 @@ def rrt_star(start, goal, obstacles, display=False):
         i = i+1
 
         if i%10 == 0:
-            rand = goal.topleft
+            rand = [goal[0], goal[1]]
         else:
             rand = world.random_position()
 
-        if common.is_in_obstacle(rand, obstacles):
+        if utils.is_in_obstacle(rand, obstacles):
             continue
 
         # Search nearest node to the rand point
@@ -36,7 +36,7 @@ def rrt_star(start, goal, obstacles, display=False):
             if node.pos == rand:
                 nearest = None
                 break
-            if common.dist(node, rand) < common.dist(nearest, rand):
+            if utils.dist(node, rand) < utils.dist(nearest, rand):
                 nearest = node
         if not nearest:
             continue
@@ -44,7 +44,7 @@ def rrt_star(start, goal, obstacles, display=False):
         # Search the neighbors of the nearest node
         neighbors = []
         for node in nodes:
-            if common.dist(node, nearest) < RADIUS and not common.line_in_obstacles(node.pos, rand, obstacles):
+            if utils.dist(node, nearest) < REROUTING_RADIUS and not utils.line_in_obstacles(node.pos, rand, obstacles):
                 neighbors.append(node)
 
         # Select best possible neighbor
@@ -63,17 +63,13 @@ def rrt_star(start, goal, obstacles, display=False):
 
         # Rewiring of the tree
         for node in neighbors:
-            if rand.cost + common.dist(rand, node) < node.cost:
+            if rand.cost + utils.dist(rand, node) < node.cost:
                 node.parent = rand
-                node.cost = rand.cost + common.dist(rand, node)
-
-        if common.dist(rand, goal.center, sqrt=True) < Constants.EPSILON:
-            path, path_len = build_path(Node(goal.center, rand))
+                node.cost = rand.cost + utils.dist(rand, node)
+        center = [goal[0] + goal[2] / 2, goal[1] + goal[3] / 2]
+        if utils.dist(rand, center, sqrt=True) < END_RADIUS:
+            path, path_len = build_path(Node(center, rand))
             return (path, nodes, i, path_len)
-
-        if display:
-            Simulation.draw(start, goal, obstacles, nodes, point=rand.pos if isinstance(rand, Node) else rand)
-            # time.sleep(1/24)
 
     raise ValueError('No Path Found')
 
@@ -84,6 +80,6 @@ def build_path(current):
     while current:
         path.append(list(current.pos))
         if current.parent:
-            path_len += common.dist(current, current.parent, sqrt=True)
+            path_len += utils.dist(current, current.parent, sqrt=True)
         current = current.parent
     return path[::-1], int(path_len)

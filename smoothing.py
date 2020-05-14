@@ -1,5 +1,4 @@
 import copy
-from common import Simulation
 import numpy as np
 import time, math
 import scipy.special
@@ -12,8 +11,6 @@ def gradient_descent(path, obstacles, weight_data=.5, weight_smooth=.1, toleranc
     change = tolerance
 
     while change >= tolerance:
-        Simulation.draw_paths(None, None, obstacles, new, (0,255,0))
-        time.sleep(1/20)
         change = 0.
         for i in range(1, len(new) - 1):
             x = path[i]

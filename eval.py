@@ -41,12 +41,12 @@ def draw_paths(start, goal, obstacles, *paths):
     _, ax = plt.subplots(1)
 
     for o in obstacles:
-        rect = patches.Rectangle((o.x, o.y),o.w,o.h, color=(1,0,0))
+        rect = patches.Rectangle((o[0], o[1]), o[2], o[3], color=(1,0,0))
         ax.add_patch(rect)
     for path, label in zip(paths[0::2], paths[1::2]):
         plt.plot(*zip(*path), '-o', label=label)
     if goal:
-        rect = patches.Rectangle((goal.x, goal.y),goal.w,goal.h)
+        rect = patches.Rectangle((goal[0], goal[1]), goal[2], goal[3])
         ax.add_patch(rect)
     if start:
         rect = patches.Rectangle((start[0]-4, start[1]-4),8,8)
