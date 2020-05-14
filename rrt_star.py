@@ -12,13 +12,14 @@ import world
 # Radius of closeness for rerouting a node
 RADIUS = 100
 
+MAX_ITERATIONS = 10000
 
 def rrt_star(start, goal, obstacles, display=False):
     nodes = []
     nodes.append(Node(start, None))
 
     i=0
-    while i < Constants.MAX_ITERATIONS:
+    while i < MAX_ITERATIONS:
         i = i+1
 
         if i%10 == 0:

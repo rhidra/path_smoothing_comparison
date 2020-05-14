@@ -3,16 +3,18 @@ import numpy as np
 from common import Constants
 import common as common
 
-WIDTH = 960
-HEIGHT = 720
+# WIDTH = 960
+# HEIGHT = 720
+WIDTH = 10000
+HEIGHT = 20000
 
 GOAL_WIDTH = 10
 GOAL_HEIGHT = 10
 
-MAX_OBSTACLES = 100
-MIN_OBSTACLES = 50
-MAX_OBS_WIDTH = 50
-MAX_OBS_HEIGHT = 50
+MAX_OBSTACLES = 1000
+MIN_OBSTACLES = 200
+MAX_OBS_WIDTH = 500
+MAX_OBS_HEIGHT = 500
 
 
 def random_position():

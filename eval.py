@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.patches as patches
 from scipy.spatial.distance import cdist
 
 def eval(*args):
@@ -10,6 +11,7 @@ def eval(*args):
         labels.append(label)
 
     # Distance between paths
+    plt.figure()
     grid = plt.GridSpec(2, 2)
     plt.subplot(grid[0,0])
     for path, label in zip(paths[1:], labels[1:]):
@@ -33,6 +35,23 @@ def eval(*args):
     plt.title('Mean rotation angle')
 
     plt.show()
+
+def draw_paths(start, goal, obstacles, *paths):
+    plt.figure()
+    _, ax = plt.subplots(1)
+
+    for o in obstacles:
+        rect = patches.Rectangle((o.x, o.y),o.w,o.h, color=(1,0,0))
+        ax.add_patch(rect)
+    for path, label in zip(paths[0::2], paths[1::2]):
+        plt.plot(*zip(*path), '-o', label=label)
+    if goal:
+        rect = patches.Rectangle((goal.x, goal.y),goal.w,goal.h)
+        ax.add_patch(rect)
+    if start:
+        rect = patches.Rectangle((start[0]-4, start[1]-4),8,8)
+        ax.add_patch(rect)
+    plt.legend()
 
 def path_angle(path):
     # Compute the angle of rotation along a path

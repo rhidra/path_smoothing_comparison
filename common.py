@@ -8,7 +8,6 @@ from numbers import Number
 
 class Constants:
     EPSILON = 50
-    MAX_ITERATIONS = 1000
 
 
 class Simulation:
