@@ -1,4 +1,3 @@
-from world import generate_world, random_position, WIDTH, HEIGHT
 from time import time as now
 import smoothing, eval, sys, path_generator
 
