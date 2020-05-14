@@ -1,33 +1,34 @@
 from world import generate_world, random_position, WIDTH, HEIGHT
-from rrt_star import rrt_star
-from astar import astar, preprocess_astar
-from random_walk import random_walk
-import path_processing, smoothing
-import eval
-import sys
-import time
+from time import time as now
+import smoothing, eval, sys, path_generator
 
 
-def main():
-    start = list(random_position())
-    path = random_walk(start, speed=20, steps=1000)
-    path_kalman = smoothing.kalman_randomwalk(path)
+def eval_time(algo):
+    for size in []:
+        start_time = now()
+        smooth = algo(path)
+        end_time = now()
+    duration = end_time - start_time
+
+
+def random_walk_once():
+    path, _ = path_generator.generate_random_walk()
+    path_kalman = smoothing.kalman(path)
     path_bezier = smoothing.bezier_divided(path)
 
-    eval.draw_paths(None, None, [], path, 'Raw path', path_kalman, 'Kalman filter path', path_bezier, 'Bezier curve')
+    eval.draw_paths([], path, 'Raw path', path_kalman, 'Kalman filter path', path_bezier, 'Bezier curve')
     eval.eval(path, 'Raw path', path_kalman, 'Kalman filter curve', path_bezier, 'Bezier curve splitted')
 
 
-def rrt():
-    [start, goal, obstacles] = generate_world()
-    path_rrt, _, _, _ = rrt_star(start, goal, obstacles)
-    path_rrt = path_processing.over_sampling(path_rrt, 200)
-    path_rrt_kalman = smoothing.kalman_randomwalk(path_rrt)
-    path_rrt_bezier = smoothing.bezier(path_rrt, steps=len(path_rrt)*3)
+def rrt_once():
+    path, obstacles = path_generator.generate_rrt()
+    path_kalman = smoothing.kalman(path)
+    path_bezier = smoothing.bezier(path, steps=len(path)*3)
 
-    eval.draw_paths(start, goal, obstacles, path_rrt, 'Raw path', path_rrt_kalman, 'Kalman filter curve', path_rrt_bezier, 'Bezier curve')
-    eval.eval(path_rrt, 'Raw path', path_rrt_kalman, 'Kalman filter curve', path_rrt_bezier, 'Bezier curve')
+    eval.draw_paths(obstacles, path, 'Raw path', path_kalman, 'Kalman filter curve', path_bezier, 'Bezier curve')
+    eval.eval(path, 'Raw path', path_kalman, 'Kalman filter curve', path_bezier, 'Bezier curve')
 
 
 if __name__ == '__main__':
-    main()
+    # random_walk_once()
+    rrt_once()

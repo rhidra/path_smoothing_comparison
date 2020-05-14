@@ -6,23 +6,6 @@ from scipy.integrate import odeint
 from numpy.linalg import inv
 
 
-def gradient_descent(path, obstacles, weight_data=.5, weight_smooth=.1, tolerance=.00001):
-    new = copy.copy(path)
-    change = tolerance
-
-    while change >= tolerance:
-        change = 0.
-        for i in range(1, len(new) - 1):
-            x = path[i]
-            y, y_prev, y_next = new[i], new[i - 1], new[i + 1]
-            y_saved = y
-            y[0] += weight_data * (x[0] - y[0]) + weight_smooth * (y_next[0] + y_prev[0] - 2 * y[0])
-            y[1] += weight_data * (x[1] - y[1]) + weight_smooth * (y_next[1] + y_prev[1] - 2 * y[1])
-
-            change += abs(y[0] - y_saved[0]) + abs(y[1] - y_saved[1])
-    return new
-
-
 # Bezier curve interpolation
 # Ref: Bezier curve based smooth path planning for mobile robot, Song et al., 2011
 def bezier_divided(path):
@@ -64,7 +47,7 @@ def bezier(path, steps=100):
 #
 # y_1(t) = x_1(t) + e_1(t)
 # y_2(t) = x_2(t) + e_2(t) with e = [e_1 e_2] ~ N(0, 1)
-def kalman_randomwalk(path):
+def kalman(path):
     new = []
 
     # Noise estimation

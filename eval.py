@@ -9,6 +9,7 @@ def eval(*args):
     for path, label in zip(args[0::2], args[1::2]):
         paths.append(np.array(path))
         labels.append(label)
+    path_length = int(np.sqrt(np.sum(np.diff(paths[0], axis=1)**2, axis=0))[0])
 
     # Distance between paths
     plt.figure()
@@ -32,12 +33,12 @@ def eval(*args):
     plt.subplot(grid[:,1])
     plt.boxplot(angles, labels=labels)
     plt.ylabel('Angle (°)')
-    plt.title('Mean rotation angle')
+    plt.title('Mean rotation angle (length={})'.format(path_length))
 
     plt.show()
 
-def draw_paths(start, goal, obstacles, *paths):
-    plt.figure()
+
+def draw_paths(obstacles, *paths):
     _, ax = plt.subplots(1)
 
     for o in obstacles:
@@ -45,13 +46,8 @@ def draw_paths(start, goal, obstacles, *paths):
         ax.add_patch(rect)
     for path, label in zip(paths[0::2], paths[1::2]):
         plt.plot(*zip(*path), '-o', label=label)
-    if goal:
-        rect = patches.Rectangle((goal[0], goal[1]), goal[2], goal[3])
-        ax.add_patch(rect)
-    if start:
-        rect = patches.Rectangle((start[0]-4, start[1]-4),8,8)
-        ax.add_patch(rect)
     plt.legend()
+
 
 def path_angle(path):
     # Compute the angle of rotation along a path
@@ -61,6 +57,7 @@ def path_angle(path):
         vec1, vec2 = b - a, c - b
         angles[i] = angle_between(vec1, vec2)
     return angles
+
 
 def unit_vector(vector):
     # Returns the unit vector of the vector
