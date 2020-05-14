@@ -2,36 +2,33 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.spatial.distance import cdist
 
-def eval(path, smooth, smooth2=None):
-    path = np.array(path)
-    smooth = np.array(smooth)
-    if smooth2 is not None:
-        smooth2 = np.array(smooth2)
+def eval(*args):
+    paths = []
+    labels = []
+    for path, label in zip(args[0::2], args[1::2]):
+        paths.append(np.array(path))
+        labels.append(label)
 
+    # Distance between paths
     grid = plt.GridSpec(2, 2)
     plt.subplot(grid[0,0])
-    d = np.diag(cdist(path, smooth))
-    plt.plot(d, label='Raw-Kalman')
-    if smooth2 is not None:
-        d2 = np.diag(cdist(path, smooth[::int(len(smooth) / len(path))]))
-        plt.plot(d2, label='Raw-Bezier')
+    for path, label in zip(paths[1:], labels[1:]):
+        d = np.diag(cdist(paths[0], path[::int(len(path) / len(paths[0]))]))
+        plt.plot(d, label=label)
     plt.title('Distance between paths')
     plt.legend()
 
+    # Rotation along paths
     plt.subplot(grid[1,0])
-    path_angles = path_angle(path)
-    plt.plot(np.linspace(0,1,len(path_angles)), path_angles, label='Raw path')
-    smooth_angles = path_angle(smooth)
-    plt.plot(np.linspace(0,1,len(smooth_angles)), smooth_angles, label='Kalman filtered path')
-    if smooth2 is not None:
-        smooth_angles2 = path_angle(smooth2)
-        plt.plot(np.linspace(0,1,len(smooth_angles2)), smooth_angles2, label='Bezier curve path')
+    angles = [path_angle(p) for p in paths]
+    for angle, label in zip(angles, labels):
+        plt.plot(np.linspace(0,1,len(angle)), angle, label=label)
     plt.title('Rotation angle along the path')
     plt.legend()
 
+    # Stats about the rotation
     plt.subplot(grid[:,1])
-    plt.boxplot([path_angles, smooth_angles, smooth_angles2],
-                labels=['Raw data', 'Kalman filtered path', 'Bezier curve path'])
+    plt.boxplot(angles, labels=labels)
     plt.ylabel('Angle (°)')
     plt.title('Mean rotation angle')
 
