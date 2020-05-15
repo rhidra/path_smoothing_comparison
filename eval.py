@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 from scipy.spatial.distance import cdist
 
-def eval(*args):
+def eval(obstacles, *args):
     paths = []
     labels = []
     for path, label in zip(args[0::2], args[1::2]):
@@ -12,8 +12,7 @@ def eval(*args):
     path_length = int(np.sqrt(np.sum(np.diff(paths[0], axis=1)**2, axis=0))[0])
 
     # Distance between paths
-    plt.figure()
-    grid = plt.GridSpec(2, 2)
+    grid = plt.GridSpec(2, 4)
     plt.subplot(grid[0,0])
     for path, label in zip(paths[1:], labels[1:]):
         d = np.diag(cdist(paths[0], path[::int(len(path) / len(paths[0]))]))
@@ -35,18 +34,16 @@ def eval(*args):
     plt.ylabel('Angle (°)')
     plt.title('Mean rotation angle (length={})'.format(path_length))
 
-    plt.show()
-
-
-def draw_paths(obstacles, *paths):
-    _, ax = plt.subplots(1)
-
+    # Display the world
+    ax = plt.subplot(grid[:,2:4])
     for o in obstacles:
         rect = patches.Rectangle((o[0], o[1]), o[2], o[3], color=(1,0,0))
         ax.add_patch(rect)
-    for path, label in zip(paths[0::2], paths[1::2]):
+    for path, label in zip(paths, labels):
         plt.plot(*zip(*path), '-o', label=label)
     plt.legend()
+
+    plt.show()
 
 
 def path_angle(path):

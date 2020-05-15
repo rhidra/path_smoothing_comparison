@@ -2,18 +2,10 @@ import numpy as np
 import utils
 from scipy.interpolate import interp1d
 
-# MAX_OBS_WIDTH = 50
-# MAX_OBS_HEIGHT = 50
 GOAL_WIDTH = 10
 GOAL_HEIGHT = 10
 
 class World:
-    # WIDTH = 960
-    # HEIGHT = 720
-    #
-    # MAX_OBSTACLES = 100
-    # MIN_OBSTACLES = 50
-
     def __init__(self, N):
         World.width = int(interp1d([1,100], [200, 10000])(N))
         World.height = int(interp1d([1,100], [200, 10000])(N))
