@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 from scipy.spatial.distance import cdist
+from main import N_LIST
 
 def eval(obstacles, *args):
     paths = []
@@ -42,6 +43,19 @@ def eval(obstacles, *args):
     for path, label in zip(paths, labels):
         plt.plot(*zip(*path), '-o', label=label)
     plt.legend()
+
+    plt.show()
+
+
+def display_time(*args):
+    grid = plt.GridSpec(len(args),1)
+    for i, data in enumerate(args):
+        plt.subplot(grid[i, 0])
+        for (mean, std), label in zip(data[1::2], data[2::2]):
+            plt.plot(N_LIST, mean, label=label)
+            plt.fill_between(N_LIST, mean - std, mean + std, alpha=.5)
+        plt.legend()
+        plt.title(data[0] + ' smoothing algorithm time comparison')
 
     plt.show()
 

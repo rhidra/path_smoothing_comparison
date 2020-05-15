@@ -25,6 +25,17 @@ Résultats similaires à RRT*.
 On va stopper les tests avec cet algo parce que c'est pas vraiment intéressant
 pour notre application.
 
+## Time performances
+
+La courbe de Bezier normale est super couteuse. Avec ~2000 noeuds, le temps va jusqu'à 100+/-20 secondes. En comparaison les autres méthodes sont similaires.
+L'algorithme a l'air O(n²) ou exponentiel.
+
+Entre Kalman et la courbe de Bezier partagée, Kalman est le moins efficace.
+Mais les deux algos ont une complexité qui semble linéaire. Pour 2000 noeuds,
+ils restent largement en dessous de 100ms, donc les deux sont satisfaisants
+pour du temps réel.  
+
+
 ## References
 
 - State of the art : https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6165411/

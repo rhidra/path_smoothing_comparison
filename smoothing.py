@@ -26,7 +26,9 @@ def bezier_divided(path):
     return new
 
 
-def bezier(path, steps=100):
+def bezier(path, steps=None):
+    if steps is None:
+        steps = len(path)*3
     new = []
     n = len(path)
     for l in np.arange(0,1,1/steps):
