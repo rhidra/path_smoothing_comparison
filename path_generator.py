@@ -17,5 +17,5 @@ def generate_rrt(N=10):
     World(N)
     [start, goal, obstacles] = generate_world()
     path, _, _, _ = rrt_star(start, goal, obstacles)
-    path = path_processing.over_sampling(path, max_length=10)
+    path = path_processing.over_sampling(path, max_length=200)
     return [path, obstacles]

@@ -51,7 +51,7 @@ def display_time(*args):
     grid = plt.GridSpec(len(args),1)
     for i, data in enumerate(args):
         plt.subplot(grid[i, 0])
-        for (mean, std), label in zip(data[1::2], data[2::2]):
+        for (mean, std, _), label in zip(data[1::2], data[2::2]):
             plt.plot(N_LIST, mean, label=label)
             plt.fill_between(N_LIST, mean - std, mean + std, alpha=.5)
         plt.legend()

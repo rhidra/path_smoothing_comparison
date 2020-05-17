@@ -27,7 +27,8 @@ pour notre application.
 
 ## Time performances
 
-La courbe de Bezier normale est super couteuse. Avec ~2000 noeuds, le temps va jusqu'à 100+/-20 secondes. En comparaison les autres méthodes sont similaires.
+La courbe de Bezier normale est super couteuse. Avec ~2000 noeuds, le temps va jusqu'à 100+/-20 secondes.
+En comparaison les autres méthodes sont similaires.
 L'algorithme a l'air O(n²) ou exponentiel.
 
 Entre Kalman et la courbe de Bezier partagée, Kalman est le moins efficace.
