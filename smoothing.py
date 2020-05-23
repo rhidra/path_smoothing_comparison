@@ -1,3 +1,8 @@
+"""
+Smoothing algorithms (Bézier, Piecewise Bézier and KFS)
+For more information, you can read section II of the paper.
+"""
+
 import copy
 import numpy as np
 import time, math
@@ -6,14 +11,13 @@ from scipy.integrate import odeint
 from numpy.linalg import inv
 
 
-# Bezier curve interpolation
-# Ref: Bezier curve based smooth path planning for mobile robot, Song et al., 2011
+# Piecewise Bézier Curve interpolation
+# Referred in the paper as Piecewise Bézier Curve algorithm
+# For more info, read section II-B of the paper
 def bezier_divided(path):
     new = []
 
     # Divide the curve in small group of 4 points
-    # According to [6] of the ref, the Bezier curve is ideal if it is separated
-    # by groups of 4 points
     for i in range(0, len(path)-3, 3):
         a, b, c, d = path[i], path[i+1], path[i+2], path[i+3]
         for l in np.arange(0,1,.1):
@@ -25,7 +29,8 @@ def bezier_divided(path):
         new = new + path[-(len(path)%4):]
     return new
 
-
+# Bézier Curve smoothing algorithm
+# For more info, read section II-A of the paper
 def bezier(path, steps=None):
     if steps is None:
         steps = len(path)*3
@@ -42,13 +47,17 @@ def bezier(path, steps=None):
     new.append(path[-1])
     return new
 
+"""
+Kalman Filter Smoothing algorithm (KFS)
+For more info, read section II-C of the paper
 
-# Kalman smoothing with a model of a random walk
-# x_1(t+1) = x_1(t) + v_1(t)
-# x_2(t+1) = x_2(t) + v_2(t) with v = [v_1 v_2] ~ N(0, 1)
-#
-# y_1(t) = x_1(t) + e_1(t)
-# y_2(t) = x_2(t) + e_2(t) with e = [e_1 e_2] ~ N(0, 1)
+Mathematical model:
+x_1(t+1) = x_1(t) + v_1(t)
+x_2(t+1) = x_2(t) + v_2(t) with v = [v_1 v_2] ~ N(0, 1)
+
+y_1(t) = x_1(t) + e_1(t)
+y_2(t) = x_2(t) + e_2(t) with e = [e_1 e_2] ~ N(0, 1)
+"""
 def kalman(path):
     new = []
 

@@ -1,3 +1,7 @@
+"""
+Algorithm of random_walk path generation
+"""
+
 import numpy as np
 
 def random_walk(start, speed, steps):

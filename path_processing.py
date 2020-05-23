@@ -1,3 +1,7 @@
+"""
+Utility functions to modify a path (eg: path pruning, over sampling)
+"""
+
 import numpy as np
 import copy
 import utils

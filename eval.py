@@ -1,3 +1,7 @@
+"""
+Display stats and graphs to evaluate the performances of each algorithm
+"""
+
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
@@ -29,9 +33,10 @@ def eval(obstacles, *args):
     plt.title('Rotation angle along the path')
     plt.legend()
 
-    # Stats about the rotation
+    # Boxplot about the rotation
     plt.subplot(grid[:,1])
-    plt.boxplot(angles, labels=labels)
+    labels_letters = list(map(lambda label: ''.join(map(lambda l: l.upper()[0], label.split(' '))), labels))
+    plt.boxplot(angles, labels=labels_letters)
     plt.ylabel('Angle (°)')
     plt.title('Mean rotation angle (length={})'.format(path_length))
 

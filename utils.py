@@ -1,3 +1,7 @@
+"""
+Utility functions (collision detection, path planning, ...)
+"""
+
 import os
 import math
 import numpy as np
@@ -15,17 +19,6 @@ class Node:
 
     def __repr__(self):
         return self.pos.__repr__()
-
-
-class Log:
-    logging = False
-
-def set_log(logging):
-    Log.logging = logging
-
-def log(*args, **kwargs):
-    if Log.logging:
-        print(*args, **kwargs)
 
 
 def intersect_line(l1s, l1e, l2s, l2e):

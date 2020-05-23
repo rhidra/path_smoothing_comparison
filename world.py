@@ -1,3 +1,7 @@
+"""
+Generate the world used by the RRT*
+"""
+
 import numpy as np
 import utils
 from scipy.interpolate import interp1d

@@ -1,3 +1,7 @@
+"""
+Generate a path with the random walk model of the RRT*
+"""
+
 from world import generate_world, random_position, World
 from rrt_star import rrt_star
 from random_walk import random_walk

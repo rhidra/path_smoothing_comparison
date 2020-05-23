@@ -1,44 +1,34 @@
-# Comparison between multiple path planning and path smoothing algorithm
+# Robot Path Smoothing through Kalman filtering and Bézier Curves
 
-## Random walk
-Impossible avec Bezier.
+## How to run
 
-Possible avec Bezier divided, mais les intersections des divisions peuvent avoir
-des courbes trop dures. C'est ce qu'on voit dans le diagramme à moustache. Les
-extrèmes de la distribution sont très importants.
+You need python 3, with Numpy, Matplotlib and Scipy installed.
 
-KF s'en sort pas trop mal. On peut calculer en temps réel l'estimation.
-A voir un moyen de quantifier ça.
+To launch the program, run one of the following command :
 
-## RRT*
-Pour peu de points, KF permet de corriger la trajectoire sans trop faire de
-courbe. On peut sans doute faire du temps réel avec KF. On ne s'éloigne
-pas trop du chemin d'origine.
+```shell script
+# Run a random walk simulation
+python main.py random
 
-Avec Bezier, on diminue la courbature en rajoutant des points : ajoute du cout
-computationnel. De plus, on s'éloigne beaucoup du chemin de départ : fort besoin
-de corriger la trajectoire après coup pour éviter les obstacles !
+# Run a RRT* simulation
+python main.py rrt
 
-## A*
-Résultats similaires à RRT*.
+# Run multiple instances of the algorithms to compare time performances
+python main.py time
+```
 
-On va stopper les tests avec cet algo parce que c'est pas vraiment intéressant
-pour notre application.
+## Files
 
-## Time performances
+- `main.py` : Run the core logic of the comparison between each algorithm
+- `world.py` : Generate the world used by the RRT*
+- `random_walk.py` : Algorithm of random_walk path generation
+- `rrt_star.py` : Algorithm for RRT* path finding algorithm
+- `path_generator.py` : Generate a path with the random walk model of the RRT*
+- `path_processing.py` : Utility functions to modify a path (eg: path pruning)
+- `smoothing.py` : Smoothing algorithms (Bézier, Piecewise Bézier and KFS)
+- `eval.py` : Display stats and graphs to evaluate the performances of each algorithm
+- `utils.py` : Utility functions (collision detection, path planning, ...)
 
-La courbe de Bezier normale est super couteuse. Avec ~2000 noeuds, le temps va jusqu'à 100+/-20 secondes.
-En comparaison les autres méthodes sont similaires.
-L'algorithme a l'air O(n²) ou exponentiel.
+## Paper
 
-Entre Kalman et la courbe de Bezier partagée, Kalman est le moins efficace.
-Mais les deux algos ont une complexité qui semble linéaire. Pour 2000 noeuds,
-ils restent largement en dessous de 100ms, donc les deux sont satisfaisants
-pour du temps réel.  
-
-
-## References
-
-- State of the art : https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6165411/
-- Bezier curve : Bézier curve based smooth path planning for mobile robot, Song et al., 2011.
-- Clothoid : http://folk.ntnu.no/skoge/prost/proceedings/ifac11-proceedings/data/html/papers/2944.pdf
+For more information about the algorithms, read `paper.pdf`.

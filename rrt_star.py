@@ -1,3 +1,7 @@
+"""
+Algorithm for RRT* path finding algorithm
+"""
+
 import numpy as np
 from functools import reduce
 import math
@@ -14,6 +18,7 @@ REROUTING_RADIUS = 100
 END_RADIUS = 50
 MAX_ITERATIONS = 1000
 
+# Main algorithm for the RRT* logic
 def rrt_star(start, goal, obstacles):
     nodes = []
     nodes.append(Node(start, None))
