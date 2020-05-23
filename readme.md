@@ -3,8 +3,13 @@
 ## How to run
 
 You need python 3, with Numpy, Matplotlib and Scipy installed.
+With pip3, run the following command to install those libraries:
 
-To launch the program, run one of the following command :
+```shell script
+pip install numpy matplotlib scipy
+```
+
+To launch the program, run one of the following command:
 
 ```shell script
 # Run a random walk simulation
